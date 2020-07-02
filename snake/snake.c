@@ -112,7 +112,7 @@ int main(){
  	curs_set(FALSE);
  	keypad(stdscr, TRUE);
  	while (gameover!=1)
-	 {
+	{
 	 	usleep(DELAY);
 		ch = getch();
 		switch(ch)
