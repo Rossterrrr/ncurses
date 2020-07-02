@@ -19,25 +19,20 @@ struct{
 void draw(int y,int x)
 {
 	mvprintw(y , x ,"o");
-	refresh();
 }
 void draw_eda(int y,int x,int extra)
 {
 	if (extra == 1)
 	{
 		mvprintw(y , x ,"M");
-		refresh();
 	}else if (extra == 2)
 	{
 		mvprintw(y , x ,"A");
-		refresh();
 	}else if (extra == 3)
 	{
 		mvprintw(y , x ,"X");
-		refresh();
 	}else 
 		mvprintw(y , x ,"p");
-		refresh();
 }
 
 int logic(int y_g, int x_g,int y,int x,int y_max,int x_max) 
@@ -47,7 +42,7 @@ int logic(int y_g, int x_g,int y,int x,int y_max,int x_max)
 	{
 		m = 1;
 	}
-	if ((y_g == y_max) || (y_g == 0) || (x_g == x_max) || (x_g == 0))
+	if ((y_g == y_max - 1) || (y_g == 2) || (x_g == x_max - 1) || (x_g == 1))
 	{
 		m = 1;
 	}
@@ -60,6 +55,25 @@ int logic_eda(int y_g,int x_g,int y_eda,int x_eda,int extra)
 	{
 		return extra;
 	}
+}
+
+draw_pole(int x,int y)
+{
+	int i ,j;
+	for(i = 0;i < x;i++)
+	{
+		for(j = 0;j<y;j++)
+		{
+			if((j == 1) || (j == y-1) ||(i == 0) || i == x-1)
+			mvprintw(j , i ,"#");
+			
+		}
+	}
+}
+
+draw_score(int rost,int x,int y)
+{
+	mvprintw(0 , (x/2)-5, "Your score : %d" , rost);
 }
 
 	
@@ -81,7 +95,7 @@ int main(){
 	ch2 = KEY_UP;
 	eda.y = rand() % y;
 	eda.x = rand() % x;
-	eda.extra = rand() % 3;
+	eda.extra = (rand() % 3)+1;
 	draw_eda(eda.y,eda.x,eda.extra);
 	
 	for (i = 0;i < rost;i++)
@@ -130,14 +144,17 @@ int main(){
 						{
 							draw(snake[i].y,snake[i].x);
 						}
+						draw_pole(x,y);
 						draw_eda(eda.y,eda.x,eda.extra);
 						if (logic_eda(snake[0].y,snake[0].x,eda.y,eda.x,eda.extra) == eda.extra)
 						{
 							rost = rost + eda.extra;
 							eda.y = rand() % y;
 							eda.x = rand() % x;
-							eda.extra = rand() % 3;
+							eda.extra = (rand() % 3)+1;
 						}
+						draw_score(rost,x,y);
+						refresh();
 						break;
 					}
 					case KEY_RIGHT:
@@ -163,14 +180,17 @@ int main(){
 						{
 							draw(snake[i].y,snake[i].x);
 						}
+						draw_pole(x,y);
 						draw_eda(eda.y,eda.x,eda.extra);
 						if (logic_eda(snake[0].y,snake[0].x,eda.y,eda.x,eda.extra) == eda.extra)
 						{
 							rost = rost + eda.extra;		
 							eda.y = rand() % y;
 							eda.x = rand() % x;
-							eda.extra = rand() % 3;
+							eda.extra = (rand() % 3)+1;
 						}
+						draw_score(rost,x,y);
+						refresh();
 						break;
 					}
 					case KEY_UP:
@@ -196,14 +216,17 @@ int main(){
 						{
 							draw(snake[i].y,snake[i].x);
 						}
+						draw_pole(x,y);
 						draw_eda(eda.y,eda.x,eda.extra);
 						if (logic_eda(snake[0].y,snake[0].x,eda.y,eda.x,eda.extra) == eda.extra)
 						{
 							rost = rost + eda.extra;
 							eda.y = rand() % y;
 							eda.x = rand() % x;
-							eda.extra = rand() % 3;
+							eda.extra = (rand() % 3)+1;
 						}
+						draw_score(rost,x,y);
+						refresh();
 						break;
 					}
 					case KEY_DOWN:
@@ -229,14 +252,17 @@ int main(){
 						{
 							draw(snake[i].y,snake[i].x);
 						}
+						draw_pole(x,y);
 						draw_eda(eda.y,eda.x,eda.extra);
 						if (logic_eda(snake[0].y,snake[0].x,eda.y,eda.x,eda.extra) == eda.extra)
 						{
 							rost = rost + eda.extra;		
 							eda.y = rand() % y;
 							eda.x = rand() % x;
-							eda.extra = rand() % 3;
+							eda.extra = (rand() % 3)+1;
 						}
+						draw_score(rost,x,y);
+						refresh();
 						break;	
 					}
 				}
