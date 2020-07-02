@@ -6,5 +6,6 @@ int main(){
 	refresh();
 	getch();
 	endwin();
+	// ytytgfdf
 	return 0;
 }
