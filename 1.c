@@ -7,5 +7,6 @@ int main(){
 	getch();
 	endwin();
 	// ytytgfdf
+	// gfdgdfgdfytryrt
 	return 0;
 }
