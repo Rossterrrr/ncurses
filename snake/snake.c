@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <time.h>
 int DELAY = 120000;
 
 struct {
@@ -42,7 +43,7 @@ int logic(int y_g, int x_g,int y,int x,int y_max,int x_max)
 	{
 		m = 1;
 	}
-	if ((y_g == y_max - 1) || (y_g == 2) || (x_g == x_max - 1) || (x_g == 1))
+	if ((y_g == y_max ) || (y_g == 1) || (x_g == x_max ) || (x_g == 0))
 	{
 		m = 1;
 	}
@@ -57,7 +58,7 @@ int logic_eda(int y_g,int x_g,int y_eda,int x_eda,int extra)
 	}
 }
 
-draw_pole(int x,int y)
+void draw_pole(int x,int y)
 {
 	int i ,j;
 	for(i = 0;i < x;i++)
@@ -71,8 +72,10 @@ draw_pole(int x,int y)
 	}
 }
 
-draw_score(int rost,int x,int y)
+void draw_score(int rost,int x,int y,int hard)
 {
+	mvprintw(0 , (x/2)-30, "Hardcore level : %d" , hard );
+	mvprintw(0 , (x/2)-11, "of 6" );
 	mvprintw(0 , (x/2)-5, "Your score : %d" , rost);
 }
 
@@ -80,11 +83,13 @@ draw_score(int rost,int x,int y)
 
 
 int main(){
+	srand(time(NULL));
 	bool gameover;
 	int x,y,xn,yn,i;
 	int ch,ch2,lng=3;
 	int exit;
 	int rost = 3;
+	int hard = 1;
 	
 	initscr();
 	x = getmaxx(stdscr);   
@@ -93,8 +98,8 @@ int main(){
 	yn=y/2;
 	int tmpy1,tmpy2,tmpx1,tmpx2;
 	ch2 = KEY_UP;
-	eda.y = rand() % y;
-	eda.x = rand() % x;
+	eda.y = (rand() % (y-3))+2;
+	eda.x = (rand() % (x-2))+1;
 	eda.extra = (rand() % 3)+1;
 	draw_eda(eda.y,eda.x,eda.extra);
 	
@@ -111,10 +116,32 @@ int main(){
  	nodelay(stdscr, TRUE);
  	curs_set(FALSE);
  	keypad(stdscr, TRUE);
+
  	while (gameover!=1)
 	{
+		if ((rost > 7) && (rost <= 15))
+		{
+			hard = 2;
+			DELAY = 90000;
+		}else if ((rost > 15) && (rost <= 25))
+			{
+				hard = 3;
+				DELAY = 60000;
+			}else if ((rost > 25) && (rost <= 40))
+					{
+						hard = 4;
+						DELAY = 40000;
+					}else if ((rost > 40) && (rost <=70))
+							{
+								hard = 5;
+								DELAY = 25000;
+							}else if((rost > 70) && (rost <= 90))
+									{
+										hard = 6;
+										DELAY = 15000;
+									}
 	 	usleep(DELAY);
-		ch = getch();
+		ch = getch();	
 		switch(ch)
 		{
 			case ERR:
@@ -149,11 +176,11 @@ int main(){
 						if (logic_eda(snake[0].y,snake[0].x,eda.y,eda.x,eda.extra) == eda.extra)
 						{
 							rost = rost + eda.extra;
-							eda.y = rand() % y;
-							eda.x = rand() % x;
+							eda.y = (rand() % (y-3))+2;
+							eda.x = (rand() % (x-2))+1;
 							eda.extra = (rand() % 3)+1;
 						}
-						draw_score(rost,x,y);
+						draw_score(rost,x,y,hard);
 						refresh();
 						break;
 					}
@@ -185,11 +212,11 @@ int main(){
 						if (logic_eda(snake[0].y,snake[0].x,eda.y,eda.x,eda.extra) == eda.extra)
 						{
 							rost = rost + eda.extra;		
-							eda.y = rand() % y;
-							eda.x = rand() % x;
+							eda.y = (rand() % (y-3))+2;
+							eda.x = (rand() % (x-2))+1;
 							eda.extra = (rand() % 3)+1;
 						}
-						draw_score(rost,x,y);
+						draw_score(rost,x,y,hard);
 						refresh();
 						break;
 					}
@@ -221,11 +248,11 @@ int main(){
 						if (logic_eda(snake[0].y,snake[0].x,eda.y,eda.x,eda.extra) == eda.extra)
 						{
 							rost = rost + eda.extra;
-							eda.y = rand() % y;
-							eda.x = rand() % x;
+							eda.y = (rand() % (y-3))+2;
+							eda.x = (rand() % (x-2))+1;
 							eda.extra = (rand() % 3)+1;
 						}
-						draw_score(rost,x,y);
+						draw_score(rost,x,y,hard);
 						refresh();
 						break;
 					}
@@ -257,11 +284,11 @@ int main(){
 						if (logic_eda(snake[0].y,snake[0].x,eda.y,eda.x,eda.extra) == eda.extra)
 						{
 							rost = rost + eda.extra;		
-							eda.y = rand() % y;
-							eda.x = rand() % x;
+							eda.y = (rand() % (y-3))+2;
+							eda.x = (rand() % (x-2))+1;
 							eda.extra = (rand() % 3)+1;
 						}
-						draw_score(rost,x,y);
+						draw_score(rost,x,y,hard);
 						refresh();
 						break;	
 					}
@@ -302,11 +329,10 @@ int main(){
 			}
 		}
 	}
-
 	mvprintw(y/2 , x/2 ,"GAME OVER");
 	mvprintw((y/2)+1,x/2, "Your score : %d" , rost);
 	mvprintw((y/2)+2,x/2, "Try again(0)");
-	mvprintw((y/2)+3,x/2, "Exit(1)?");
+	mvprintw((y/2)+3,x/2, "1 - Exit; 0 - NO");
 	refresh(); 
 	sleep(10);
 	endwin();
